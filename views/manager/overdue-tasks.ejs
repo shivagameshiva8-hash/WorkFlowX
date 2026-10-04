@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overdue Tasks | WorkFlowX</title>
+    <link rel="stylesheet" href="/css/tasks.css">
+
+    <style>
+        .overdue-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid #dc2626;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .overdue-card h3 {
+            margin-bottom: 12px;
+            font-size: 19px;
+        }
+
+        .overdue-card p {
+            margin: 9px 0;
+            color: #475467;
+            line-height: 1.5;
+        }
+
+        .overdue-badge {
+            display: inline-block;
+            background: #fee2e2;
+            color: #b91c1c;
+            border-radius: 20px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            padding: 35px;
+            text-align: center;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        .empty-state p {
+            margin-top: 10px;
+            color: #667085;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3548d4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2 class="brand">☑ WorkFlowX</h2>
+
+        <nav>
+            <a href="/manager/dashboard">⌂ Dashboard</a>
+            <a href="/manager/tasks/new">＋ Create / Assign Task</a>
+            <a href="/manager/tasks">☷ View All Tasks</a>
+            <a href="/manager/employee-tasks">♟ Employee Tracking</a>
+            <a href="/manager/analytics">▥ Analytics</a>
+            <a href="/manager/overdue-tasks" class="active">◷ Overdue Tasks</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <span>WorkFlowX / Overdue Tasks</span>
+
+            <form action="/auth/logout" method="POST">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </header>
+
+        <section class="page-heading">
+            <div>
+                <h1>All Overdue Tasks</h1>
+                <p>Review overdue tasks and manage employee deadlines.</p>
+            </div>
+        </section>
+
+        <% if (!tasks || tasks.length === 0) { %>
+
+            <div class="empty-state">
+                <h3>All caught up!</h3>
+                <p>No overdue tasks found.</p>
+            </div>
+
+        <% } else { %>
+
+            <div class="overdue-list">
+                <% tasks.forEach(task => { %>
+
+                    <article class="overdue-card">
+                        <h3><%= task.title %></h3>
+
+                        <span class="overdue-badge">Overdue</span>
+
+                        <p>
+                            <strong>Description:</strong>
+                            <%= task.description %>
+                        </p>
+
+                        <p>
+                            <strong>Employee:</strong>
+                            <%= task.assignedTo ? task.assignedTo.name : "Employee unavailable" %>
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            <%= task.assignedTo ? task.assignedTo.email : "N/A" %>
+                        </p>
+
+                        <p>
+                            <strong>Priority:</strong>
+                            <%= task.priority %>
+                        </p>
+
+                        <p>
+                            <strong>Deadline:</strong>
+                            <%= task.deadline ? new Date(task.deadline).toDateString() : "Not set" %>
+                        </p>
+
+                        <form action="/manager/tasks/<%= task._id %>/extend-deadline"
+                              method="POST"
+                              style="margin-top: 18px;">
+
+                            <label for="deadline-<%= task._id %>">
+                                <strong>Extend deadline:</strong>
+                            </label>
+
+                            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+                                <input
+                                    type="date"
+                                    id="deadline-<%= task._id %>"
+                                    name="deadline"
+                                    required
+                                    style="padding:10px; border:1px solid #d0d5dd; border-radius:7px;"
+                                >
+
+                                <button type="submit" class="create-button">
+                                    Update Deadline
+                                </button>
+                            </div>
+                        </form>
+                    </article>
+
+                <% }) %>
+            </div>
+
+        <% } %>
+
+       
+
+    </main>
+</div>
+
+</body>
+</html>

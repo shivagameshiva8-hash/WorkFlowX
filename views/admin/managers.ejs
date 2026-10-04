@@ -1,0 +1,113 @@
+
+<section class="admin-page users-page">
+
+    <!-- Page Heading -->
+    <div class="users-heading">
+        <div>
+            <span class="users-eyebrow">TEAM MANAGEMENT</span>
+            <h2>Manage Managers</h2>
+            <p>View registered managers and their account details across WorkFlowX.</p>
+        </div>
+
+        <div class="users-total">
+            <span class="total-icon">♙</span>
+            <div>
+                <span class="total-label">Total Managers</span>
+                <h3><%= managers.length %></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager Directory -->
+    <div class="users-card">
+
+        <div class="users-card-heading">
+            <div>
+                <h3>Manager Directory</h3>
+                <p>Registered managers and account information</p>
+            </div>
+
+            <span class="users-count">
+                <%= managers.length %> managers
+            </span>
+        </div>
+
+        <% if (managers.length === 0) { %>
+
+            <div class="users-empty">
+                <div class="empty-icon">♙</div>
+                <h3>No managers found</h3>
+                <p>Registered manager accounts will appear here.</p>
+            </div>
+
+        <% } else { %>
+
+            <div class="users-table-wrapper">
+                <table class="users-table">
+
+                    <thead>
+                        <tr>
+                            <th>MANAGER</th>
+                            <th>EMAIL ADDRESS</th>
+                            <th>ROLE</th>
+                            <th>ACCOUNT</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% managers.forEach(manager => { %>
+                            <tr>
+                                <td>
+                                    <div class="user-profile">
+                                        <div class="user-avatar">
+                                            <%= manager.name
+                                                ? manager.name.charAt(0).toUpperCase()
+                                                : "M" %>
+                                        </div>
+
+                                        <div class="user-details">
+                                            <span class="user-name">
+                                                <%= manager.name || "Unnamed Manager" %>
+                                            </span>
+                                            <span class="user-subtitle">
+                                                Team Manager
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="user-email">
+                                        <%= manager.email || "No email available" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="user-role role-manager">
+                                        <%= manager.role || "Manager" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="account-status">
+                                        <span class="status-dot"></span>
+                                        Registered
+                                    </span>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="users-card-footer">
+                Showing <strong><%= managers.length %></strong>
+                manager<%= managers.length === 1 ? "" : "s" %>
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>

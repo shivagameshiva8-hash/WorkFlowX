@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Task | WorkFlowX</title>
+    <link rel="stylesheet" href="/css/create-task.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2 class="brand">☑ WorkFlowX</h2>
+
+        <nav>
+            <a href="/manager/dashboard">⌂ Dashboard</a>
+            <a href="/manager/tasks/new" class="active">＋ Create / Assign Task</a>
+            <a href="/manager/tasks">☷ View Tasks</a>
+            <a href="/manager/employee-tasks">♟ Employee Tracking</a>
+            <a href="/manager/analytics">▥ Analytics</a>
+            <a href="/manager/overdue-tasks">◷ Overdue Tasks</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <span>WorkFlowX / Create Task</span>
+
+            <form action="/auth/logout" method="POST">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </header>
+
+        <section class="page-heading">
+            <div>
+                <h1>Create & Assign Task</h1>
+                <p>Create a task and assign it to an employee with a priority and deadline.</p>
+            </div>
+        </section>
+
+        <section class="form-card">
+
+            <div class="form-card-heading">
+                <div class="form-icon">＋</div>
+                <div>
+                    <h2>Task Details</h2>
+                    <p>Enter the task information below.</p>
+                </div>
+            </div>
+
+            <form action="/manager/tasks" method="POST" class="task-form">
+
+                <div class="form-group">
+                    <label for="title">Task Title <span>*</span></label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="e.g. Build the login page"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description <span>*</span></label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        placeholder="Describe the task and its requirements..."
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="assignedTo">Assign To <span>*</span></label>
+                    <select id="assignedTo" name="assignedTo" required>
+                        <option value="">Select an employee</option>
+
+                        <% employees.forEach(employee => { %>
+                            <option value="<%= employee._id %>">
+                                <%= employee.name %> — <%= employee.email %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="priority">Priority <span>*</span></label>
+                        <select id="priority" name="priority" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deadline">Deadline <span>*</span></label>
+                        <input
+                            type="date"
+                            id="deadline"
+                            name="deadline"
+                            required>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <a href="/manager/dashboard" class="cancel-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-button">
+                        Assign Task →
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+        <p class="form-note">
+            <span>*</span> Required fields. The assigned employee will be able
+            to view this task on their dashboard.
+        </p>
+
+    </main>
+</div>
+
+<script>
+    const deadlineInput = document.getElementById("deadline");
+    const today = new Date();
+    const localToday = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, "0"),
+        String(today.getDate()).padStart(2, "0")
+    ].join("-");
+
+    deadlineInput.min = localToday;
+</script>
+
+</body>
+</html>

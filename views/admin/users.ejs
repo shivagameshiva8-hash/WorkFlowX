@@ -1,0 +1,113 @@
+
+<section class="admin-page users-page">
+
+    <!-- Page Heading -->
+    <div class="users-heading">
+        <div>
+            <span class="users-eyebrow">ADMINISTRATION</span>
+            <h2>User Management</h2>
+            <p>Manage accounts and view registered users across WorkFlowX.</p>
+        </div>
+
+        <div class="users-total">
+            <span class="total-icon">♙</span>
+            <div>
+                <span class="total-label">Total Users</span>
+                <h3><%= users.length %></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Table Card -->
+    <div class="users-card">
+
+        <div class="users-card-heading">
+            <div>
+                <h3>All Users</h3>
+                <p>Account directory and role information</p>
+            </div>
+
+            <span class="users-count">
+                <%= users.length %> accounts
+            </span>
+        </div>
+
+        <% if (users.length === 0) { %>
+
+            <div class="users-empty">
+                <div class="empty-icon">♙</div>
+                <h3>No users found</h3>
+                <p>Registered accounts will appear here.</p>
+            </div>
+
+        <% } else { %>
+
+            <div class="users-table-wrapper">
+                <table class="users-table">
+
+                    <thead>
+                        <tr>
+                            <th>USER</th>
+                            <th>EMAIL ADDRESS</th>
+                            <th>ROLE</th>
+                            <th>ACCOUNT</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% users.forEach(user => { %>
+                            <tr>
+                                <td>
+                                    <div class="user-profile">
+                                        <div class="user-avatar">
+                                            <%= user.name
+                                                ? user.name.charAt(0).toUpperCase()
+                                                : "U" %>
+                                        </div>
+
+                                        <div class="user-details">
+                                            <span class="user-name">
+                                                <%= user.name || "Unnamed User" %>
+                                            </span>
+                                            <span class="user-subtitle">
+                                                WorkFlowX Member
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="user-email">
+                                        <%= user.email || "No email available" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="user-role role-<%= (user.role || 'user').toLowerCase() %>">
+                                        <%= user.role || "User" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="account-status">
+                                        <span class="status-dot"></span>
+                                        Registered
+                                    </span>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="users-card-footer">
+                Showing <strong><%= users.length %></strong>
+                registered user<%= users.length === 1 ? "" : "s" %>
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>

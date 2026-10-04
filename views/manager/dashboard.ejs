@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkFlowX | Manager Dashboard</title>
+    <link rel="stylesheet" href="/css/employee-tasks.css">
+
+    <style>
+        .notification-popup {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: min(350px, calc(100vw - 32px));
+            max-height: 80vh;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.18);
+            z-index: 1000;
+        }
+
+        .notification-header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .notification-body p {
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .close-btn {
+            padding: 8px 15px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #edf0ff;
+            color: #3046d3;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 0 0 28px;
+        }
+
+        .action-link {
+            display: inline-block;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #3446c7;
+            background: white;
+            border: 1px solid #dfe4f0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .action-link.primary {
+            background: #3548d4;
+            color: white;
+            border-color: #3548d4;
+        }
+
+        .logout-button {
+            border: 1px solid #e3e8f0;
+            border-radius: 8px;
+            background: white;
+            padding: 12px;
+            cursor: pointer;
+            color: #475467;
+        }
+
+        .dashboard-section-title {
+            margin: 0 0 8px;
+            font-size: 21px;
+        }
+
+        .section-description {
+            margin: 0 0 22px;
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .no-tasks {
+            padding: 24px;
+            background: white;
+            border: 1px solid #e3e8f0;
+            border-radius: 12px;
+            color: #667085;
+        }
+
+        @media (max-width: 700px) {
+            .notification-popup {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+
+
+            .employee-filter {
+                margin-bottom: 24px;
+                max-width: 400px;
+            }
+
+            .employee-filter label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+                color: #344054;
+            }
+
+            .employee-filter select {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #d0d5dd;
+                border-radius: 8px;
+                background: white;
+                font-size: 15px;
+                outline-color: #3548d4;
+            }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2 class="brand">☑ WorkFlowX</h2>
+
+        <nav>
+            <a href="/manager/dashboard" class="active">⌂ Dashboard</a>
+            <a href="/manager/tasks/new">＋ Create / Assign Task</a>
+            <a href="/manager/tasks">☷ View Tasks</a>
+            <a href="/manager/employee-tasks">♟ Employee Tracking</a>
+            <a href="/manager/analytics">▥ Analytics</a>
+            <a href="/manager/overdue-tasks">◷ Overdue Tasks</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <span>WorkFlowX / Manager Dashboard</span>
+
+            <form action="/auth/logout" method="POST">
+                <button type="submit" class="logout-button">
+                    Logout
+                </button>
+            </form>
+        </header>
+
+        <section class="page-heading">
+            <div>
+                <h1>Manager Dashboard</h1>
+                <p>Welcome to WorkFlowX! Here's your team's task progress.</p>
+            </div>
+        </section>
+
+        <section class="dashboard-actions">
+            <a href="/manager/tasks/new" class="action-link primary">
+                + Create & Assign Task
+            </a>
+
+            <a href="/manager/tasks" class="action-link">
+                View All Tasks
+            </a>
+
+            <a href="/manager/analytics" class="action-link">
+                View Analytics
+            </a>
+        </section>
+
+        <section>
+            <!-- drop down employee name -->
+             
+            <h2 class="dashboard-section-title">Employee Task Tracking</h2>
+
+            <p class="section-description">
+                Select an employee to view their task progress.
+            </p>
+
+            <div class="employee-filter">
+                <label for="employeeSelect">Choose Employee</label>
+
+                <select id="employeeSelect">
+                    <option value="all">All Employees</option>
+
+                    <% employeeSummaries.forEach(employee => { %>
+                        <option value="<%= employee._id %>">
+                            <%= employee.name %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+
+
+            <% if (employeeSummaries.length === 0) { %>
+
+                <div class="no-tasks">
+                    No employees with assigned tasks yet.
+                    <a href="/manager/tasks/new">Create your first task</a>.
+                </div>
+
+            <% } else { %>
+
+                <div class="employee-grid">
+
+                    <% employeeSummaries.forEach(employee => { %>
+
+                        <article class="employee-card"
+                                    data-employee-id="<%= employee._id %>">
+
+                            <div class="employee-header">
+                                <div class="avatar">
+                                    <%= employee.name
+                                        ? employee.name.charAt(0).toUpperCase()
+                                        : "E" %>
+                                </div>
+
+                                <div class="employee-info">
+                                    <h2><%= employee.name %></h2>
+                                    <p><%= employee.email %></p>
+                                </div>
+                            </div>
+
+                            <div class="progress-info">
+                                <span>
+                                    <strong><%= employee.completedTasks %></strong>
+                                    / <%= employee.totalTasks %> completed
+                                </span>
+
+                                <span class="percentage">
+                                    <%= employee.progress %>%
+                                </span>
+                            </div>
+
+                            <div
+                                class="progress-track"
+                                role="progressbar"
+                                aria-label="Task completion progress"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="<%= employee.progress %>">
+
+                                <div
+                                    class="progress-fill"
+                                    style="width: <%= employee.progress %>%">
+                                </div>
+                            </div>
+
+                            <div class="status-grid">
+
+                                <div class="status-item completed">
+                                    <strong><%= employee.completedTasks %></strong>
+                                    <span>Completed</span>
+                                </div>
+
+                                <div class="status-item in-progress">
+                                    <strong><%= employee.inProgressTasks %></strong>
+                                    <span>In Progress</span>
+                                </div>
+
+                                <div class="status-item pending">
+                                    <strong><%= employee.pendingTasks %></strong>
+                                    <span>Pending</span>
+                                </div>
+
+                                <div class="status-item overdue">
+                                    <strong><%= employee.overdueTasks %></strong>
+                                    <span>Overdue</span>
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    <% }) %>
+
+                </div>
+
+            <% } %>
+        </section>
+
+    </main>
+</div>
+
+<!-- Manager notification popups -->
+<% if (notifications && notifications.length > 0) { %>
+
+    <div class="notification-popup">
+
+        <div class="notification-header">
+            🔔 Notifications
+        </div>
+
+        <div class="notification-body">
+
+            <% notifications.forEach(notification => { %>
+
+                <p><%= notification.message %></p>
+
+                <form
+                    action="/manager/notifications/<%= notification._id %>/read"
+                    method="POST">
+
+                    <button type="submit" class="close-btn">
+                        Close
+                    </button>
+
+                </form>
+
+            <% }) %>
+
+        </div>
+
+    </div>
+
+<% } %>
+
+<!-- doupdown script.js -->
+ <script>
+    const employeeSelect = document.getElementById("employeeSelect");
+    const employeeCards = document.querySelectorAll(".employee-card");
+
+    employeeSelect.addEventListener("change", function () {
+        const selectedId = this.value;
+
+        employeeCards.forEach(card => {
+            if (
+                selectedId === "all" ||
+                card.dataset.employeeId === selectedId
+            ) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

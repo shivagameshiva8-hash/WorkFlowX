@@ -1,0 +1,411 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6fb;
+    color: #202938;
+}
+
+.layout {
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: #172554;
+    color: white;
+    padding: 28px 16px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.brand {
+    font-size: 23px;
+    margin: 0 0 35px 10px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar nav a {
+    color: #dbeafe;
+    text-decoration: none;
+    padding: 13px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.sidebar nav a {
+    color: #dbeafe;
+    background: transparent;
+    text-decoration: none;
+    padding: 13px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background: #3548d4;
+    color: #ffffff;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 100px 32px 35px;
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    height: 70px;
+    padding: 0 32px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 90;
+}
+
+.topbar span {
+    font-weight: 600;
+}
+
+.logout-button {
+    padding: 10px 17px;
+    background: #fff;
+    border: 1px solid #d0d5dd;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.page-heading h1 {
+    font-size: 29px;
+    margin-bottom: 8px;
+}
+
+.page-heading p {
+    color: #667085;
+    line-height: 1.5;
+}
+
+.create-button {
+    display: inline-block;
+    padding: 12px 17px;
+    border: none;
+    border-radius: 8px;
+    background: #3548d4;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.create-button:hover {
+    background: #2939b5;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 32px;
+}
+
+.summary-card {
+    background: white;
+    padding: 22px;
+    border: 1px solid #e8eaf0;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(16, 24, 40, 0.04);
+}
+
+.summary-card span {
+    color: #667085;
+    font-size: 14px;
+}
+
+.summary-card h2 {
+    margin-top: 13px;
+    font-size: 28px;
+}
+
+.task-section > h2 {
+    font-size: 21px;
+    margin-bottom: 18px;
+}
+
+.task-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.task-card {
+    padding: 23px;
+    background: white;
+    border: 1px solid #e8eaf0;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(16, 24, 40, 0.04);
+    min-width: 0;
+}
+
+.task-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.task-card-header h3 {
+    font-size: 18px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.description {
+    color: #667085;
+    line-height: 1.6;
+    font-size: 14px;
+    margin-bottom: 22px;
+    overflow-wrap: anywhere;
+}
+
+.task-info {
+    display: grid;
+    gap: 18px;
+    border-top: 1px solid #eaecf0;
+    padding-top: 18px;
+}
+
+.task-info > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.label {
+    color: #667085;
+    font-size: 12px;
+}
+
+.task-info strong {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.task-info small {
+    color: #667085;
+    overflow-wrap: anywhere;
+}
+
+.status,
+.priority {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.in-progress {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.overdue {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.priority.low {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.priority.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.priority.high {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.empty-state {
+    background: white;
+    border: 1px solid #e8eaf0;
+    border-radius: 12px;
+    padding: 35px;
+    text-align: center;
+}
+
+.empty-state p {
+    margin: 12px 0 20px;
+    color: #667085;
+}
+
+@media (max-width: 1100px) {
+    .summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .task-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 18px 14px;
+    }
+
+    .brand {
+        margin-bottom: 15px;
+    }
+
+    .sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .topbar {
+        position: sticky;
+        top: 0;
+        left: 0;
+        height: 58px;
+        padding: 0 16px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 25px 16px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .summary {
+        gap: 12px;
+    }
+
+    .summary-card {
+        padding: 16px;
+    }
+
+    .summary-card h2 {
+        font-size: 24px;
+    }
+
+    .task-card {
+        padding: 17px;
+    }
+}
+
+
+
+/* White sidebar */
+.sidebar {
+    background-color: #ffffff !important;
+    border-right: 1px solid #e5e7eb;
+}
+
+/* Sidebar brand */
+.sidebar .brand {
+    color: #172554 !important;
+}
+
+/* All sidebar links */
+.sidebar nav a {
+    background-color: transparent !important;
+    color: #344054 !important;
+}
+
+/* Selected menu item - white background */
+.sidebar nav a.active {
+    background-color: #ffffff !important;
+    color: #172554 !important;
+}
+
+/* Hover effect - light gray */
+.sidebar nav a:hover {
+    background-color: #f2f4f7 !important;
+    color: #172554 !important;
+}
+
+/* Keep active item white even when hovered */
+.sidebar nav a.active:hover {
+    background-color: #ffffff !important;
+    color: #172554 !important;
+}
+
+
+/* Keep the sidebar white */
+.sidebar {
+    background-color: #ffffff !important;
+}
+
+/* Keep WorkFlowX branding blue */
+.sidebar .brand {
+    color: #3548d4 !important;
+}
+
+/* Keep sidebar links dark */
+.sidebar nav a {
+    color: #344054 !important;
+}
+
+/* Selected link stays white */
+.sidebar nav a.active {
+    background-color: #ffffff !important;
+    color: #3548d4 !important;
+}
+
+/* Light gray hover */
+.sidebar nav a:hover {
+    background-color: #f2f4f7 !important;
+    color: #3548d4 !important;
+}

@@ -1,0 +1,73 @@
+<section class="admin-page">
+
+    <div class="section-heading">
+        <div>
+            <h2>Admin Reports</h2>
+            <p>Overview of users, teams, and task performance.</p>
+        </div>
+    </div>
+
+    <!-- USER OVERVIEW -->
+    <section class="report-section">
+        <h2>User Overview</h2>
+
+        <div class="report-grid">
+
+            <div class="report-card">
+                <h3>Total Users</h3>
+                <p class="report-number"><%= totalUsers %></p>
+            </div>
+
+            <div class="report-card">
+                <h3>Employees</h3>
+                <p class="report-number"><%= totalEmployees %></p>
+            </div>
+
+            <div class="report-card">
+                <h3>Managers</h3>
+                <p class="report-number"><%= totalManagers %></p>
+            </div>
+
+            <div class="report-card">
+                <h3>Admins</h3>
+                <p class="report-number"><%= totalAdmins %></p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- TASK OVERVIEW -->
+    <section class="report-section">
+        <h2>Task Overview</h2>
+
+        <div class="report-grid">
+
+            <div class="report-card">
+                <h3>Total Tasks</h3>
+                <p class="report-number"><%= totalTasks %></p>
+            </div>
+
+            <div class="report-card">
+                <h3>Pending</h3>
+                <p class="report-number"><%= pendingTasks %></p>
+            </div>
+
+            <div class="report-card">
+                <h3>In Progress</h3>
+                <p class="report-number"><%= inProgressTasks %></p>
+            </div>
+
+            <div class="report-card">
+                <h3>Completed</h3>
+                <p class="report-number"><%= completedTasks %></p>
+            </div>
+
+            <div class="report-card">
+                <h3>Overdue</h3>
+                <p class="report-number"><%= overdueTasks %></p>
+            </div>
+
+        </div>
+    </section>
+
+</section>

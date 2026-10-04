@@ -1,0 +1,176 @@
+
+<section class="admin-page users-page">
+
+    <!-- Page Heading -->
+    <div class="users-heading">
+        <div>
+            <span class="users-eyebrow">WORKFLOW MANAGEMENT</span>
+            <h2>All Tasks</h2>
+            <p>Monitor task assignments, deadlines, priorities, and progress across WorkFlowX.</p>
+        </div>
+
+        <div class="users-total">
+            <span class="total-icon">☑</span>
+            <div>
+                <span class="total-label">Total Tasks</span>
+                <h3><%= tasks.length %></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Status Summary -->
+    <div class="task-summary-grid">
+        <div class="task-summary-card">
+            <span class="task-summary-label">Pending</span>
+            <strong class="task-summary-number pending-text">
+                <%= tasks.filter(task => task.status === "Pending").length %>
+            </strong>
+            <span class="task-summary-caption">Awaiting action</span>
+        </div>
+
+        <div class="task-summary-card">
+            <span class="task-summary-label">In Progress</span>
+            <strong class="task-summary-number progress-text">
+                <%= tasks.filter(task => task.status === "In Progress").length %>
+            </strong>
+            <span class="task-summary-caption">Currently being worked on</span>
+        </div>
+
+        <div class="task-summary-card">
+            <span class="task-summary-label">Completed</span>
+            <strong class="task-summary-number completed-text">
+                <%= tasks.filter(task => task.status === "Completed").length %>
+            </strong>
+            <span class="task-summary-caption">Successfully finished</span>
+        </div>
+
+        <div class="task-summary-card">
+            <span class="task-summary-label">Overdue</span>
+            <strong class="task-summary-number overdue-text">
+                <%= tasks.filter(task => task.status === "Overdue").length %>
+            </strong>
+            <span class="task-summary-caption">Past deadline</span>
+        </div>
+    </div>
+
+    <!-- All Tasks Table -->
+    <div class="users-card tasks-card">
+
+        <div class="users-card-heading">
+            <div>
+                <h3>Task Directory</h3>
+                <p>All tasks assigned across the organization</p>
+            </div>
+
+            <span class="users-count">
+                <%= tasks.length %> tasks
+            </span>
+        </div>
+
+        <% if (tasks.length === 0) { %>
+
+            <div class="users-empty">
+                <div class="empty-icon">☑</div>
+                <h3>No tasks found</h3>
+                <p>Tasks will appear here once they are created.</p>
+            </div>
+
+        <% } else { %>
+
+            <div class="users-table-wrapper">
+                <table class="users-table tasks-table">
+
+                    <thead>
+                        <tr>
+                            <th>TASK</th>
+                            <th>EMPLOYEE</th>
+                            <th>ASSIGNED BY</th>
+                            <th>PRIORITY</th>
+                            <th>DEADLINE</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% tasks.forEach(task => { %>
+                            <tr>
+                                <td>
+                                    <div class="task-title-cell">
+                                        <span class="task-title">
+                                            <%= task.title || "Untitled Task" %>
+                                        </span>
+                                        <span class="task-subtitle">Work item</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="task-person">
+                                        <div class="task-person-avatar">
+                                            <%= task.assignedTo && task.assignedTo.name
+                                                ? task.assignedTo.name.charAt(0).toUpperCase()
+                                                : "E" %>
+                                        </div>
+                                        <span>
+                                            <%= task.assignedTo
+                                                ? task.assignedTo.name
+                                                : "Unassigned" %>
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="task-person">
+                                        <div class="task-person-avatar manager-avatar">
+                                            <%= task.assignedBy && task.assignedBy.name
+                                                ? task.assignedBy.name.charAt(0).toUpperCase()
+                                                : "M" %>
+                                        </div>
+                                        <span>
+                                            <%= task.assignedBy
+                                                ? task.assignedBy.name
+                                                : "Unknown" %>
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="task-priority priority-<%= (task.priority || 'medium').toLowerCase() %>">
+                                        <%= task.priority || "Medium" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="task-deadline">
+                                        <%= task.deadline
+                                            ? new Date(task.deadline).toLocaleDateString("en-IN", {
+                                                day: "2-digit",
+                                                month: "short",
+                                                year: "numeric"
+                                            })
+                                            : "No deadline" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="task-status status-<%= (task.status || 'pending').toLowerCase().replace(/\s+/g, '-') %>">
+                                        <span class="task-status-dot"></span>
+                                        <%= task.status || "Pending" %>
+                                    </span>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="users-card-footer">
+                Showing <strong><%= tasks.length %></strong>
+                task<%= tasks.length === 1 ? "" : "s" %>
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>

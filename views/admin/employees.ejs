@@ -1,0 +1,113 @@
+
+<section class="admin-page users-page">
+
+    <!-- Page Heading -->
+    <div class="users-heading">
+        <div>
+            <span class="users-eyebrow">TEAM MANAGEMENT</span>
+            <h2>Manage Employees</h2>
+            <p>View employee accounts and their details across WorkFlowX.</p>
+        </div>
+
+        <div class="users-total">
+            <span class="total-icon">♙</span>
+            <div>
+                <span class="total-label">Total Employees</span>
+                <h3><%= employees.length %></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Table -->
+    <div class="users-card">
+
+        <div class="users-card-heading">
+            <div>
+                <h3>Employee Directory</h3>
+                <p>Registered employees and account information</p>
+            </div>
+
+            <span class="users-count">
+                <%= employees.length %> employees
+            </span>
+        </div>
+
+        <% if (employees.length === 0) { %>
+
+            <div class="users-empty">
+                <div class="empty-icon">♙</div>
+                <h3>No employees found</h3>
+                <p>Employee accounts will appear here when registered.</p>
+            </div>
+
+        <% } else { %>
+
+            <div class="users-table-wrapper">
+                <table class="users-table">
+
+                    <thead>
+                        <tr>
+                            <th>EMPLOYEE</th>
+                            <th>EMAIL ADDRESS</th>
+                            <th>ROLE</th>
+                            <th>ACCOUNT</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% employees.forEach(employee => { %>
+                            <tr>
+                                <td>
+                                    <div class="user-profile">
+                                        <div class="user-avatar">
+                                            <%= employee.name
+                                                ? employee.name.charAt(0).toUpperCase()
+                                                : "E" %>
+                                        </div>
+
+                                        <div class="user-details">
+                                            <span class="user-name">
+                                                <%= employee.name || "Unnamed Employee" %>
+                                            </span>
+                                            <span class="user-subtitle">
+                                                Team Member
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="user-email">
+                                        <%= employee.email || "No email available" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="user-role role-employee">
+                                        <%= employee.role || "Employee" %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="account-status">
+                                        <span class="status-dot"></span>
+                                        Registered
+                                    </span>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="users-card-footer">
+                Showing <strong><%= employees.length %></strong>
+                employee<%= employees.length === 1 ? "" : "s" %>
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>

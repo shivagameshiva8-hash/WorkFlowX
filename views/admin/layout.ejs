@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle || "WorkFlowX Admin" %></title>
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+</head>
+<body>
+<div class="admin-layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">W</div>
+            <div>
+                <h2>WorkFlowX</h2>
+                <span>Admin Portal</span>
+            </div>
+        </div>
+
+        <div class="sidebar-label">MAIN MENU</div>
+
+        <nav class="navigation">
+            <a href="/admin/dashboard"
+               class="nav-link <%= activePage === 'dashboard' ? 'active' : '' %>">
+                <span class="nav-icon">▦</span> Dashboard
+            </a>
+            <a href="/admin/users"
+               class="nav-link <%= activePage === 'users' ? 'active' : '' %>">
+                <span class="nav-icon">♙</span> View Users
+            </a>
+            <a href="/admin/employees"
+               class="nav-link <%= activePage === 'employees' ? 'active' : '' %>">
+                <span class="nav-icon">♧</span> Manage Employees
+            </a>
+            <a href="/admin/managers"
+               class="nav-link <%= activePage === 'managers' ? 'active' : '' %>">
+                <span class="nav-icon">♙</span> Manage Managers
+            </a>
+            <a href="/admin/tasks"
+               class="nav-link <%= activePage === 'tasks' ? 'active' : '' %>">
+                <span class="nav-icon">☷</span> View All Tasks
+            </a>
+            <a href="/admin/reports"
+               class="nav-link <%= activePage === 'reports' ? 'active' : '' %>">
+                <span class="nav-icon">▤</span> View Reports
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="admin-profile">
+                <div class="profile-avatar">A</div>
+                <div class="profile-details">
+                    <strong>Administrator</strong>
+                    <span>System Admin</span>
+                </div>
+            </div>
+            <form action="/auth/logout" method="POST">
+                <button type="submit" class="logout-button">
+                    <span>↪</span> Logout
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">Workspace / <%= pageTitle || "Dashboard" %></p>
+                <h1><%= pageTitle || "Admin Dashboard" %></h1>
+            </div>
+            <div class="topbar-right">
+                <div class="admin-badge">
+                    <span class="online-dot"></span>
+                    Admin Panel
+                </div>
+                <div class="topbar-avatar">A</div>
+            </div>
+        </header>
+
+        <%- body %>
+
+        <footer class="page-footer">
+            <span>© 2026 WorkFlowX</span>
+            <span>Task Management Workspace</span>
+        </footer>
+    </main>
+</div>
+</body>
+</html>

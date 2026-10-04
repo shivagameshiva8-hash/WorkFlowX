@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tasks | WorkFlowX</title>
+    <link rel="stylesheet" href="/css/tasks.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2 class="brand">☑ WorkFlowX</h2>
+        <nav>
+            <a href="/manager/dashboard">⌂ Dashboard</a>
+            <a href="/manager/tasks/new">＋ Create / Assign Task</a>
+            <a href="/manager/tasks" class="active">☷ View All Tasks</a>
+            <a href="/manager/employee-tasks">♟ Employee Tracking</a>
+            <a href="/manager/analytics">▥ Analytics</a>
+            <a href="/manager/overdue-tasks">◷ Overdue Tasks</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <span>WorkFlowX / All Tasks</span>
+            <form action="/auth/logout" method="POST">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </header>
+
+        <section class="page-heading">
+            <div>
+                <h1>All Tasks</h1>
+                <p>View and monitor the tasks assigned to your employees.</p>
+            </div>
+            <a href="/manager/tasks/new" class="create-button">
+                + Create Task
+            </a>
+        </section>
+
+        <section class="summary">
+            <div class="summary-card">
+                <span>Total Tasks</span>
+                <h2><%= tasks.length %></h2>
+            </div>
+            <div class="summary-card">
+                <span>Completed</span>
+                <h2><%= tasks.filter(t => t.status === "Completed").length %></h2>
+            </div>
+            <div class="summary-card">
+                <span>In Progress</span>
+                <h2><%= tasks.filter(t => t.status === "In Progress").length %></h2>
+            </div>
+            <div class="summary-card">
+                <span>Pending</span>
+                <h2><%= tasks.filter(t => t.status === "Pending").length %></h2>
+            </div>
+        </section>
+
+        <section class="task-section">
+            <h2>Task Details</h2>
+
+            <% if (tasks.length === 0) { %>
+                <div class="empty-state">
+                    <h3>No tasks found</h3>
+                    <p>Create a task and assign it to an employee to get started.</p>
+                    <a href="/manager/tasks/new" class="create-button">Create Task</a>
+                </div>
+            <% } else { %>
+
+                <div class="task-grid">
+                    <% tasks.forEach(task => { %>
+                        <article class="task-card">
+
+                            <div class="task-card-header">
+                                <h3><%= task.title %></h3>
+                                <span class="status <%= task.status.toLowerCase().replace(/\s+/g, '-') %>">
+                                    <%= task.status %>
+                                </span>
+                            </div>
+
+                            <p class="description">
+                                <%= task.description %>
+                            </p>
+
+                            <div class="task-info">
+                                <div>
+                                    <span class="label">Assigned Employee</span>
+                                    <strong>
+                                        <%= task.assignedTo ? task.assignedTo.name : "Employee unavailable" %>
+                                    </strong>
+                                    <small>
+                                        <%= task.assignedTo ? task.assignedTo.email : "" %>
+                                    </small>
+                                </div>
+
+                                <div>
+                                    <span class="label">Priority</span>
+                                    <span class="priority <%= task.priority.toLowerCase() %>">
+                                        <%= task.priority %>
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <span class="label">Deadline</span>
+                                    <strong>
+                                        <%= task.deadline ? new Date(task.deadline).toDateString() : "Not set" %>
+                                    </strong>
+                                </div>
+                            </div>
+
+                        </article>
+                    <% }) %>
+                </div>
+
+            <% } %>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

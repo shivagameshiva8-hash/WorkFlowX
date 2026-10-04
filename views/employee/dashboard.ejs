@@ -1,0 +1,552 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard | WorkFlowX</title>
+    <link rel="stylesheet" href="/css/employee-dashboard.css">
+
+    <style>
+        /* Employee notifications */
+        .notification-panel {
+            margin: 24px 0;
+            padding: 22px;
+            background: #fff;
+            border: 1px solid #f3caca;
+            border-left: 5px solid #dc3545;
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(40, 50, 70, 0.06);
+        }
+
+        .notification-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .notification-heading h3 {
+            margin: 0 0 6px;
+            color: #26334d;
+            font-size: 18px;
+        }
+
+        .notification-heading p {
+            margin: 0;
+            color: #7b8798;
+            font-size: 12px;
+        }
+
+        .notification-count {
+            padding: 7px 11px;
+            background: #ffe5e7;
+            color: #c62838;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            margin-top: 10px;
+            background: #fff5f5;
+            border: 1px solid #ffe4e4;
+            border-radius: 10px;
+        }
+
+        .notification-dot {
+            width: 9px;
+            height: 9px;
+            margin-top: 5px;
+            flex-shrink: 0;
+            background: #dc3545;
+            border-radius: 50%;
+        }
+
+        .notification-content strong {
+            color: #a92532;
+            font-size: 13px;
+        }
+
+        .notification-content p {
+            margin: 6px 0 0;
+            color: #5f6878;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .notification-empty {
+            margin: 20px 0;
+            padding: 16px;
+            color: #64748b;
+            background: #f1f8f4;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2 class="brand">☑ WorkFlowX</h2>
+
+        <nav>
+            <a href="#dashboard-home" class="nav-link active"
+               onclick="showSection('dashboard-home', this)">
+                ⌂ Dashboard
+            </a>
+
+            <a href="#my-tasks" class="nav-link"
+               onclick="showSection('my-tasks', this)">
+                ☷ My Tasks
+            </a>
+
+            <a href="#task-summary" class="nav-link"
+               onclick="showSection('task-summary', this)">
+                ▦ Summary
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <form action="/auth/logout" method="POST">
+                <button type="submit" class="logout-link">↪ Logout</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <span>WorkFlowX / Employee Workspace</span>
+
+            <div class="user-chip">
+                <div class="avatar">
+                    <%= employee && employee.name
+                        ? employee.name.charAt(0).toUpperCase()
+                        : "E" %>
+                </div>
+
+                <span><%= employee ? employee.name : "Employee" %></span>
+            </div>
+        </header>
+
+        <!-- SECTION 1: DASHBOARD -->
+        <section id="dashboard-home" class="page-section">
+
+            <div class="welcome">
+                <div>
+                    <p class="eyebrow">EMPLOYEE WORKSPACE</p>
+
+                    <h1>
+                        Welcome back,
+                        <%= employee ? employee.name : "Employee" %>! 👋
+                    </h1>
+
+                    <p>
+                        Welcome to your workspace.
+                        Manage your assigned tasks and track your progress here.
+                    </p>
+
+                    <% if (employee && employee.email) { %>
+                        <p class="email"><%= employee.email %></p>
+                    <% } %>
+                </div>
+
+                <div class="welcome-icon">✓</div>
+            </div>
+
+            <!-- NOTIFICATION PANEL -->
+            <% if (notifications && notifications.length > 0) { %>
+                <div class="notification-panel">
+                    <div class="notification-heading">
+                        <div>
+                            <h3>🔔 Notifications</h3>
+                            <p>You have updates about your tasks.</p>
+                        </div>
+
+                        <span class="notification-count">
+                            <%= notifications.length %> unread
+                        </span>
+                    </div>
+
+                <% notifications.forEach(notification => { %>
+                    <div class="notification-item" id="notification-<%= notification._id %>">
+
+                        <span class="notification-dot"></span>
+
+                        <div class="notification-content">
+                            <strong>Task Notification</strong>
+                            <p><%= notification.message %></p>
+                        </div>
+
+                        <form
+                            action="/employee/notifications/<%= notification._id %>/read"
+                            method="POST"
+                        >
+                            <button
+                                type="submit"
+                                class="notification-close"
+                                title="Dismiss notification"
+                                aria-label="Dismiss notification"
+                            >&times;</button>
+                        </form>
+
+                    </div>
+                <% }) %>
+
+                   
+                </div>
+            <% } %>
+            <!-- END NOTIFICATION PANEL -->
+
+            <div class="dashboard-overview">
+                <h2>Your Workspace</h2>
+
+                <p>
+                    You currently have
+                    <strong><%= totalTasks %></strong>
+                    assigned tasks.
+                </p>
+
+                <div class="dashboard-cards">
+
+                    <div class="dashboard-card">
+                        <span class="card-icon">☷</span>
+                        <h3>My Tasks</h3>
+                        <p>View task descriptions, priorities and deadlines.</p>
+
+                        <button type="button"
+                                onclick="showSectionById('my-tasks')">
+                            View My Tasks →
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <span class="card-icon">▦</span>
+                        <h3>Task Summary</h3>
+                        <p>See completed tasks and the work remaining.</p>
+
+                        <button type="button"
+                                onclick="showSectionById('task-summary')">
+                            View Summary →
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MY TASKS -->
+        <section id="my-tasks" class="page-section" hidden>
+
+            <div class="section-heading">
+                <div>
+                    <h2>My Tasks</h2>
+                    <p>All tasks assigned to you by your manager.</p>
+                </div>
+
+                <span class="task-count">
+                    <%= totalTasks %> tasks
+                </span>
+            </div>
+
+            <% if (!tasks || tasks.length === 0) { %>
+
+                <div class="empty-state">
+                    <div class="empty-icon">☷</div>
+                    <h3>No tasks assigned yet</h3>
+                    <p>
+                        When your manager assigns you a task,
+                        it will appear here.
+                    </p>
+                </div>
+
+            <% } else { %>
+
+                <div class="task-grid">
+
+                    <% tasks.forEach(task => { %>
+                        <article class="task-card">
+
+                            <div class="task-header">
+                                <span class="priority <%= String(task.priority || 'Medium').toLowerCase() %>">
+                                    <%= task.priority || "Medium" %> Priority
+                                </span>
+
+                                <span class="status <%= String(task.status || 'Pending').toLowerCase().replace(/\s+/g, '-') %>">
+                                    <%= task.status || "Pending" %>
+                                </span>
+                            </div>
+
+                            <h3><%= task.title %></h3>
+
+                            <p class="description">
+                                <%= task.description || "No description provided." %>
+                            </p>
+
+                            <div class="task-meta">
+                                <div>
+                                    <span class="meta-label">DEADLINE</span>
+                                    <strong>
+                                        <%= task.deadline
+                                            ? new Date(task.deadline).toDateString()
+                                            : "Not set" %>
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span class="meta-label">PRIORITY</span>
+                                    <strong><%= task.priority || "Medium" %></strong>
+                                </div>
+
+                                <div>
+                                    <span class="meta-label">TASK STATUS</span>
+                                    <strong><%= task.status || "Pending" %></strong>
+                                </div>
+                            </div>
+
+                            <!-- TASK ACTION BUTTONS -->
+                            <div class="task-actions">
+
+                                <% if (task.status === "Pending") { %>
+
+                                    <form
+                                        action="/employee/tasks/<%= task._id %>/status"
+                                        method="POST">
+
+                                        <input type="hidden"
+                                               name="status"
+                                               value="In Progress">
+
+                                        <button type="submit" class="start-work-btn">
+                                            ▶ Start Work
+                                        </button>
+                                    </form>
+
+                                <% } else if (task.status === "In Progress") { %>
+
+                                    <form
+                                        action="/employee/tasks/<%= task._id %>/status"
+                                        method="POST"
+                                        onsubmit="return confirm('Have you finished this task?');">
+
+                                        <input type="hidden"
+                                               name="status"
+                                               value="Completed">
+
+                                        <button type="submit" class="complete-work-btn">
+                                            ✓ Mark as Completed
+                                        </button>
+                                    </form>
+
+                                <% } else if (task.status === "Completed") { %>
+
+                                    <p class="completed-message">
+                                        ✓ Task Completed
+                                    </p>
+
+                                <% } else if (task.status === "Overdue") { %>
+
+                                    <p class="overdue-message">
+                                        This task is overdue.
+                                        Contact your manager for next steps.
+                                    </p>
+
+                                <% } %>
+
+                            </div>
+                        </article>
+                    <% }) %>
+
+                </div>
+
+            <% } %>
+        </section>
+
+        <!-- SECTION 3: TASK SUMMARY -->
+        <section id="task-summary" class="page-section" hidden>
+
+            <div class="overview-heading">
+                <h2>Task Status Overview</h2>
+                <p>
+                    See how many tasks you have completed
+                    and how many still need your attention.
+                </p>
+            </div>
+
+            <%
+                const safeTotal = Number(totalTasks) || 0;
+
+                const pendingPercent = safeTotal
+                    ? (pendingTasks / safeTotal) * 100 : 0;
+
+                const progressPercent = safeTotal
+                    ? (inProgressTasks / safeTotal) * 100 : 0;
+
+                const completedPercent = safeTotal
+                    ? (completedTasks / safeTotal) * 100 : 0;
+
+                const overduePercent = safeTotal
+                    ? (overdueTasks / safeTotal) * 100 : 0;
+            %>
+
+            <div class="summary-total-card">
+                <div>
+                    <span class="meta-label">TOTAL ASSIGNED TASKS</span>
+                    <h3><%= totalTasks %></h3>
+                </div>
+
+                <div>
+                    <span class="meta-label">TASKS COMPLETED</span>
+                    <h3><%= completedTasks %></h3>
+                </div>
+            </div>
+
+            <div class="overview-card">
+
+                <div class="status-row">
+                    <div class="status-info">
+                        <span class="status-dot pending-dot"></span>
+                        <span>Pending</span>
+                    </div>
+
+                    <strong>
+                        <%= pendingTasks %> (<%= Math.round(pendingPercent) %>%)
+                    </strong>
+
+                    <div class="progress-track">
+                        <div class="progress-fill pending-fill"
+                             style="width: <%= pendingPercent %>%"></div>
+                    </div>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-info">
+                        <span class="status-dot progress-dot"></span>
+                        <span>In Progress</span>
+                    </div>
+
+                    <strong>
+                        <%= inProgressTasks %> (<%= Math.round(progressPercent) %>%)
+                    </strong>
+
+                    <div class="progress-track">
+                        <div class="progress-fill progress-fill-blue"
+                             style="width: <%= progressPercent %>%"></div>
+                    </div>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-info">
+                        <span class="status-dot completed-dot"></span>
+                        <span>Completed</span>
+                    </div>
+
+                    <strong>
+                        <%= completedTasks %> (<%= Math.round(completedPercent) %>%)
+                    </strong>
+
+                    <div class="progress-track">
+                        <div class="progress-fill completed-fill"
+                             style="width: <%= completedPercent %>%"></div>
+                    </div>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-info">
+                        <span class="status-dot overdue-dot"></span>
+                        <span>Overdue</span>
+                    </div>
+
+                    <strong>
+                        <%= overdueTasks %> (<%= Math.round(overduePercent) %>%)
+                    </strong>
+
+                    <div class="progress-track">
+                        <div class="progress-fill overdue-fill"
+                             style="width: <%= overduePercent %>%"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="summary-message">
+                You have completed
+                <strong><%= completedTasks %></strong>
+                out of <strong><%= totalTasks %></strong> tasks.
+
+                <% if (pendingTasks + inProgressTasks + overdueTasks > 0) { %>
+                    Keep working on your remaining tasks!
+                <% } else if (totalTasks > 0) { %>
+                    Great work! All your tasks are completed.
+                <% } else { %>
+                    Your task progress will appear here once tasks are assigned.
+                <% } %>
+            </p>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            WorkFlowX · Manage your work, track your progress.
+        </footer>
+
+    </main>
+</div>
+
+<!-- SECTION NAVIGATION -->
+<script>
+    function showSection(sectionId, clickedLink) {
+        document.querySelectorAll(".page-section").forEach(section => {
+            section.hidden = section.id !== sectionId;
+        });
+
+        document.querySelectorAll(".nav-link").forEach(link => {
+            link.classList.remove("active");
+        });
+
+        if (clickedLink) {
+            clickedLink.classList.add("active");
+        }
+
+        const labels = {
+            "dashboard-home": "Dashboard",
+            "my-tasks": "My Tasks",
+            "task-summary": "Task Summary"
+        };
+
+        const topbarLabel = document.querySelector(".topbar > span");
+
+        if (topbarLabel) {
+            topbarLabel.textContent =
+                "WorkFlowX / " + labels[sectionId];
+        }
+    }
+
+    function showSectionById(sectionId) {
+        const link = document.querySelector(
+            '.nav-link[href="#' + sectionId + '"]'
+        );
+
+        showSection(sectionId, link);
+    }
+
+    // Show Dashboard when the page first loads.
+    showSection(
+        "dashboard-home",
+        document.querySelector('.nav-link[href="#dashboard-home"]')
+    );
+</script>
+
+</body>
+</html>

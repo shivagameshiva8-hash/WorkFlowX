@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Task Tracking | WorkFlowX</title>
+    <link rel="stylesheet" href="/css/employee-tasks.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2 class="brand">☑ WorkFlowX</h2>
+
+        <nav>
+            <a href="/manager/dashboard">⌂ Dashboard</a>
+            <a href="/manager/employee-tasks" class="active">♟ Employee Task Track</a>
+            <a href="/manager/tasks/new">＋ Assign Task</a>
+            <a href="/manager/analytics">▥ Analytics</a>
+            <a href="/manager/overdue-tasks">◷ Overdue Tasks</a>
+            <a href="/manager/tasks">☷ All Tasks</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <span>WorkFlowX / Employee Tracking</span>
+            <span class="manager-label">Manager Dashboard</span>
+        </header>
+
+        <section class="page-heading">
+            <div>
+                <h1>Employee Task Tracking</h1>
+                <p>View the overall task progress for each employee.</p>
+            </div>
+            <div class="employee-count">
+                <strong><%= employeeSummaries.length %></strong>
+                <span>Employees</span>
+            </div>
+        </section>
+
+        <% if (employeeSummaries.length === 0) { %>
+            <div class="empty-state">
+                <h2>No assigned tasks yet</h2>
+                <p>Assign tasks to employees to see their progress here.</p>
+                <a class="primary-button" href="/manager/tasks/new">
+                    + Create Task
+                </a>
+            </div>
+        <% } else { %>
+
+            <section class="employee-grid">
+                <% employeeSummaries.forEach(employee => { %>
+
+                    <article class="employee-card">
+                        <div class="employee-header">
+                            <div class="avatar">
+                                <%= employee.name
+                                    ? employee.name.charAt(0).toUpperCase()
+                                    : "E" %>
+                            </div>
+
+                            <div class="employee-info">
+                                <h2><%= employee.name %></h2>
+                                <p><%= employee.email %></p>
+                            </div>
+                        </div>
+
+                        <div class="progress-info">
+                            <span>
+                                <strong><%= employee.completedTasks %></strong>
+                                / <%= employee.totalTasks %> completed
+                            </span>
+                            <span class="percentage">
+                                <%= employee.progress %>%
+                            </span>
+                        </div>
+
+                        <div
+                            class="progress-track"
+                            role="progressbar"
+                            aria-label="Task completion progress"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="<%= employee.progress %>">
+                            <div
+                                class="progress-fill"
+                                style="width: <%= employee.progress %>%">
+                            </div>
+                        </div>
+
+                        <div class="status-grid">
+                            <div class="status-item completed">
+                                <strong><%= employee.completedTasks %></strong>
+                                <span>Completed</span>
+                            </div>
+
+                            <div class="status-item in-progress">
+                                <strong><%= employee.inProgressTasks %></strong>
+                                <span>In Progress</span>
+                            </div>
+
+                            <div class="status-item pending">
+                                <strong><%= employee.pendingTasks %></strong>
+                                <span>Pending</span>
+                            </div>
+
+                            <div class="status-item overdue">
+                                <strong><%= employee.overdueTasks %></strong>
+                                <span>Overdue</span>
+                            </div>
+                        </div>
+                    </article>
+
+                <% }) %>
+            </section>
+
+        <% } %>
+
+        
+    </main>
+</div>
+
+</body>
+</html>
