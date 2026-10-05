@@ -72,8 +72,8 @@ app.use("/manager", managerRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
-    // res.send("WorkFlowX is running");
-    res.render("index");
+    res.send("WorkFlowX is running");
+    // res.render("index");
 });
 
 
