@@ -15,7 +15,7 @@ const expressLayouts = require("express-ejs-layouts");
 app.use(expressLayouts);
 
 app.set("view engine", "ejs");
-app.use(expressLayouts);
+// app.use(expressLayouts);
 app.set("layout", false);
 
 
@@ -72,8 +72,9 @@ app.use("/manager", managerRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
-    res.send("WorkFlowX is running");
+    // res.send("WorkFlowX is running");
     // res.render("index");
+    res.render("auth/login");
 });
 
 
@@ -82,8 +83,20 @@ app.get("/", (req, res) => {
 //     console.log("Server running on port 3000");
 // });
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+// app.listen(3000, () => {
+//     console.log("Server running on port 3000");
+
+//     checkOverdueTasks();
+
+//     setInterval(() => {
+//         checkOverdueTasks();
+//     }, 60 * 1000);
+// });
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 
     checkOverdueTasks();
 
