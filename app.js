@@ -27,6 +27,10 @@ const managerRoutes = require("./routes/manager");
 const adminRoutes = require("./routes/admin");
 
 
+app.get("/privacy", (req, res) => {
+    res.render("privacy");
+});
+
 
 
 app.set("view engine", "ejs");
@@ -68,7 +72,8 @@ app.use("/manager", managerRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
-    res.send("WorkFlowX is running");
+    // res.send("WorkFlowX is running");
+    res.render("index");
 });
 
 
