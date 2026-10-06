@@ -20,12 +20,16 @@ const notificationSchema = new mongoose.Schema({
 
     type: {
         type: String,
+
         enum: [
+            "task_assigned",
             "overdue",
             "deadline_reminder",
             "task_completed",
             "deadline_extended"
         ],
+
+
         required: true
     },
 

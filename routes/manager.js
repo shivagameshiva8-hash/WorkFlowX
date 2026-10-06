@@ -96,7 +96,19 @@ router.post("/tasks", role("manager"), async (req, res) => {
         });
 
         await task.save();
+
+        // Notify the employee about the new task
+        await Notification.create({
+            user: task.assignedTo,
+            message: `You have been assigned a new task: "${task.title}".`,
+            task: task._id,
+            type: "task_assigned",
+            isRead: false
+        });
+
         res.send("Task created successfully");
+                
+
     } catch (err) {
         console.error(err);
         res.status(500).send("Error creating task");
