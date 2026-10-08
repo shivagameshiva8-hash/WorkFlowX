@@ -791,7 +791,20 @@
                     </div>
 
                     <!-- Public registration creates employee accounts only. -->
-                    <input type="hidden" name="role" value="employee">
+                    <div class="field">
+                        <label for="role">Role</label>
+
+                        <div class="input-wrap">
+                            <select id="role" name="role" required>
+                                <option value="" disabled selected>Select your role</option>
+                                <option value="employee">Employee</option>
+                                <option value="manager">Manager</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                                        
+
 
                     <label class="terms">
                         <input type="checkbox" id="agreeTerms" required>
