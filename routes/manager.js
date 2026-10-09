@@ -106,7 +106,9 @@ router.post("/tasks", role("manager"), async (req, res) => {
             isRead: false
         });
 
-        res.send("Task created successfully");
+        // res.send("Task created successfully");
+        // return res.redirect("/manager/dashboard");
+        return res.redirect("/manager/tasks");
                 
 
     } catch (err) {
